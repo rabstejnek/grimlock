@@ -14,7 +14,9 @@ jobs:
           architecture: 'x64'
       - name: Install NSIS
         run: |
-          Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh') -RunAsAdmin
+          $str1 = (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+          $str2 = " -RunAsAdmin"
+          Invoke-Expression "$str1str2"
           scoop bucket add extras
           scoop install nsis
       - name: Print NSIS version
