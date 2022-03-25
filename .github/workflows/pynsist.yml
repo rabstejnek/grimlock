@@ -20,14 +20,14 @@ jobs:
           scoop install nsis
       - name: Print NSIS version
         run: makensis -VERSION
-      - name: Install dependencies
-        run: |
-          pip install -U pip wheel
-          pip install -r requirements_dev.txt
-          pip install pynsist
       - name: Make wheels
         run: |
-          pip wheel . -w wheels
+          pip install -U pip wheel
+          pip wheel -w wheels -r requirements_dev.txt
+      - name: Install dependencies
+        run: |
+          pip install -f wheels
+          pip install pynsist
       - name: Create installer
         run: |
           pynsist installer.cfg
