@@ -12,6 +12,10 @@ jobs:
         with:
           python-version: '3.9.10'
           architecture: 'x64'
+      - name: Install NSIS differently
+        run: |
+          iwr -useb get.scoop.sh -outfile 'install.ps1'
+          .\install.ps1 -RunAsAdmin
       - name: Install NSIS
         run: |
           $str1 = (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
