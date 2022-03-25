@@ -19,7 +19,7 @@ jobs:
           pip install nuitka
       - name: Create distributable
         run: |
-          python -m nuitka --assume-yes-for-downloads --onefile grimlock/__main__.py
+          python -m nuitka --assume-yes-for-downloads --plugin-enable=numpy --onefile grimlock/__main__.py
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
