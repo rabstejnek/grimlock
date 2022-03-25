@@ -13,7 +13,7 @@ jobs:
           python-version: '3.9.10'
           architecture: 'x64'
       - name: Install NSIS using external script
-        uses: idleburg/NSIS-Dev/windows-latest
+        uses: idleburg/NSIS-Dev@windows-latest
       - name: Install NSIS
         run: |
           Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
