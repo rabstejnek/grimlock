@@ -14,21 +14,20 @@ jobs:
           architecture: 'x64'
       - name: Install NSIS
         run: |
-          $str1 = (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
-          $str2 = " -RunAsAdmin"
-          Invoke-Expression "$str1$str2"
+          iwr -useb get.scoop.sh -outfile 'install.ps1'
+          .\install.ps1 -RunAsAdmin
           scoop bucket add extras
           scoop install nsis
       - name: Print NSIS version
         run: makensis -VERSION
-      - name: Install dependencies
-        run: |
-          pip install -U pip wheel
-          pip install -r requirements_dev.txt
-          pip install pynsist
       - name: Make wheels
         run: |
-          pip wheel . -w wheels
+          pip install -U pip wheel
+          pip wheel -w wheels -r requirements_dev.txt
+      - name: Install dependencies
+        run: |
+          pip install -f wheels
+          pip install pynsist
       - name: Create installer
         run: |
           pynsist installer.cfg
@@ -36,4 +35,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Grimlock Installer
-          path: /build/nsis/Grimlock_1.0.exe
+          path: build/nsis/Grimlock_1.0.exe
