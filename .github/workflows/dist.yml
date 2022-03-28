@@ -3,9 +3,12 @@ name: dist
 on: workflow_dispatch
 
 jobs:
-  dist_windows:
-    name: Distributable for Windows
-    runs-on: windows-latest
+  dist:
+    name: Distributable for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -19,9 +22,9 @@ jobs:
           pip install nuitka
       - name: Create distributable
         run: |
-          python -m nuitka --assume-yes-for-downloads --plugin-enable=numpy --onefile grimlock/__main__.py
+          python -m nuitka --assume-yes-for-downloads --nofollow-import-to=numpy --onefile -o grimlock-${{ matrix.os }} grimlock/__main__.py
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: my-artifact
-          path: __main__.exe
+          name: grimlock-${{ matrix.os }}
+          path: grimlock-${{ matrix.os }}.exe
