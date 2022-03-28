@@ -25,9 +25,18 @@ jobs:
           pip install -U pip wheel
           pip install -r requirements_dev.txt
           pip install nuitka
-      - name: Create distributable
+      - if: ${{ matrix.os == 'windows-latest' }}
+        name: Create windows distributable
         run: |
           python -m nuitka --assume-yes-for-downloads --nofollow-import-to=numpy --onefile -o grimlock-${{ matrix.os }} grimlock/__main__.py
+      - if: ${{ matrix.os == 'ubuntu-latest' }}
+        name: Create ubuntu distributable
+        run: |
+          python -m nuitka --assume-yes-for-downloads --nofollow-import-to=numpy --onefile -o grimlock-${{ matrix.os }} grimlock/__main__.py
+      - if: ${{ matrix.os == 'macos-latest' }}
+        name: Create macos distributable
+        run: |
+          python -m nuitka --assume-yes-for-downloads --macos-create-app-bundle --nofollow-import-to=numpy --onefile -o grimlock-${{ matrix.os }} grimlock/__main__.py
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
