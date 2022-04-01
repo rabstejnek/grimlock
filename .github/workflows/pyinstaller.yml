@@ -1,9 +1,9 @@
-name: dist
+name: pyinstaller
 
 on: workflow_dispatch
 
 jobs:
-  dist:
+  pyinstaller:
     name: PyInstaller Distributable for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:

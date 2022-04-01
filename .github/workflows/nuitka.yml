@@ -1,9 +1,9 @@
-name: dist
+name: nuitka
 
 on: workflow_dispatch
 
 jobs:
-  dist:
+  nuitka:
     name: Nuitka Distributable for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -28,17 +28,17 @@ jobs:
       - if: ${{ matrix.os == 'windows-latest' }}
         name: Create windows distributable
         run: |
-          python -m nuitka --output-dir=dist/  -o grimlock --assume-yes-for-downloads --plugin-enable=numpy --onefile grimlock/__main__.py
+          python -m nuitka -o grimlock --assume-yes-for-downloads --plugin-enable=numpy --onefile grimlock/__main__.py
       - if: ${{ matrix.os == 'ubuntu-latest' }}
         name: Create ubuntu distributable
         run: |
-          python -m nuitka --output-dir=dist/  -o grimlock --assume-yes-for-downloads --plugin-enable=numpy --onefile grimlock/__main__.py
+          python -m nuitka -o grimlock --assume-yes-for-downloads --plugin-enable=numpy --onefile grimlock/__main__.py
       - if: ${{ matrix.os == 'macos-latest' }}
         name: Create macos distributable
         run: |
-          python -m nuitka --output-dir=dist/  -o grimlock --assume-yes-for-downloads --macos-create-app-bundle --plugin-enable=numpy --onefile grimlock/__main__.py
+          python -m nuitka -o grimlock --assume-yes-for-downloads --macos-create-app-bundle --plugin-enable=numpy --onefile grimlock/__main__.py
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: grimlock-nuitka-${{ matrix.os }}
-          path: dist/
+          path: grimlock*
