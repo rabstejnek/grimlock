@@ -1,0 +1,44 @@
+name: dist
+
+on: workflow_dispatch
+
+jobs:
+  dist:
+    name: PyInstaller Distributable for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+          architecture: 'x64'
+      - if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev --fix-missing
+      - name: Install dependencies
+        run: |
+          pip install -U pip wheel
+          pip install -r requirements_dev.txt
+          pip install pyinstaller
+      - if: ${{ matrix.os == 'windows-latest' }}
+        name: Create windows distributable
+        run: |
+          pyinstaller --name grimlock --onefile grimlock/__main__.py
+      - if: ${{ matrix.os == 'ubuntu-latest' }}
+        name: Create ubuntu distributable
+        run: |
+          pyinstaller --name grimlock --onefile grimlock/__main__.py
+      - if: ${{ matrix.os == 'macos-latest' }}
+        name: Create macos distributable
+        run: |
+          pyinstaller --name grimlock --onefile grimlock/__main__.py
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: grimlock-pyinstaller-${{ matrix.os }}
+          path: dist/
