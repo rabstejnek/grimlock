@@ -1,6 +1,6 @@
 from gooey import Gooey, GooeyParser
 
-from grimlock import commands
+from grimlock import commands, nuitka_gooey_fix  # noqa: F401
 
 
 @Gooey(clear_before_run=True, program_name="grimlock")
