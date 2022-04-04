@@ -41,4 +41,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: grimlock-nuitka-${{ matrix.os }}
-          path: __main__*
+          path: __main__.${{ matrix.os == 'windows-latest' && 'exe' || matrix.os == 'ubuntu-latest' && 'bin' || 'app' }}
